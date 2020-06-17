@@ -16,7 +16,12 @@ class InputViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
-
+    @IBOutlet weak var titleTextField: UITextField!
+    
+    @IBOutlet weak var contentsTextView: UITextView!
+    
+    @IBOutlet weak var datePicker: UIDatePicker!
+    
     /*
     // MARK: - Navigation
 
