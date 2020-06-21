@@ -10,19 +10,21 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-    let realm = try! Realm()
+    @IBOutlet weak var searchBar: UITableView!
     
-    var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+    let realm = try! Realm()
+    var taskArray = try! Realm().objects(Task.self).filter("category == searchBar")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
