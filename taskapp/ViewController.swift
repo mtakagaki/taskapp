@@ -14,10 +14,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     @IBOutlet weak var tableView: UITableView!
     
-    @IBOutlet weak var searchBar: UITableView!
+   
+    @IBOutlet weak var searchBar: UISearchBar!
     
     let realm = try! Realm()
-    var taskArray = try! Realm().objects(Task.self).filter("category == searchBar")
+    var taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        let predicate = NSPredicate(format: "category = %@", searchBar.text!)
+        taskArray = realm.objects(Task.self).filter(predicate)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

@@ -25,7 +25,7 @@ class InputViewController: UIViewController {
 
         titleTextField.text = task.title
         contentsTextView.text = task.contents
-        categoryTextView.text = task.category
+        categoryTextField.text = task.category
         datePicker.date = task.date
     }
 
@@ -38,7 +38,7 @@ class InputViewController: UIViewController {
         try! realm.write {
             self.task.title = self.titleTextField.text!
             self.task.contents = self.contentsTextView.text
-            self.task.category = self.categoryTextView.text!
+            self.task.category = self.categoryTextField.text!
             self.task.date = self.datePicker.date
             self.realm.add(self.task, update: .modified)
         }
@@ -91,7 +91,7 @@ class InputViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
     
-    @IBOutlet weak var categoryTextView: UITextField!
+    @IBOutlet weak var categoryTextField: UITextField!
     
     @IBOutlet weak var contentsTextView: UITextView!
     
