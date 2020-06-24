@@ -29,9 +29,24 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty{
+            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        } else {
+        
         let predicate = NSPredicate(format: "category = %@", searchBar.text!)
         taskArray = realm.objects(Task.self).filter(predicate)
+        }
+        
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tapGesture)
+        
+        tableView.reloadData()
     }
+    
+    @objc func dismissKeyboard(){
+           // キーボードを閉じる
+           view.endEditing(true)
+       }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskArray.count
