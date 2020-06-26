@@ -14,7 +14,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     @IBOutlet weak var tableView: UITableView!
     
-   
     @IBOutlet weak var searchBar: UISearchBar!
     
     let realm = try! Realm()
@@ -26,38 +25,41 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty{
-            taskArray = try! Realm().objects(Task.self).sorted(byKeyPath: "date", ascending: true)
-        } else {
-        
-        let predicate = NSPredicate(format: "category = %@", searchBar.text!)
-        taskArray = realm.objects(Task.self).filter(predicate)
-        }
         
         let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGesture)
+    }
+    
+    //searchBarを押した時の
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty{
+            taskArray = realm.objects(Task.self).sorted(byKeyPath: "date", ascending: true)
+        } else {
+            let predicate = NSPredicate(format: "category = %@", searchBar.text!)
+            taskArray = realm.objects(Task.self).filter(predicate).sorted(byKeyPath: "date", ascending: true)
+        }
         
         tableView.reloadData()
     }
     
     @objc func dismissKeyboard(){
-           // キーボードを閉じる
-           view.endEditing(true)
-       }
+        // キーボードを閉じる
+        view.endEditing(true)
+    }
     
+    // データの数（＝セルの数）を返すメソッド
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return taskArray.count
     }
     
+    // 各セルの内容を返すメソッド
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 再利用可能な cell を得る
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         let task = taskArray[indexPath.row]
-        cell.textLabel?.text = task.title
+        cell.textLabel?.text = task.title + "   " + task.category
 
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm"

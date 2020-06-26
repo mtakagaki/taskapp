@@ -35,17 +35,19 @@ class InputViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        try! realm.write {
-            self.task.title = self.titleTextField.text!
-            self.task.contents = self.contentsTextView.text
-            self.task.category = self.categoryTextField.text!
-            self.task.date = self.datePicker.date
-            self.realm.add(self.task, update: .modified)
-        }
+        if (!self.titleTextField.text!.isEmpty || !self.categoryTextField.text!.isEmpty){
+            try! realm.write {
+                self.task.title = self.titleTextField.text!
+                self.task.contents = self.contentsTextView.text
+                self.task.category = self.categoryTextField.text!
+                self.task.date = self.datePicker.date
+                self.realm.add(self.task, update: .modified)
+            }
         
-        setNotification(task: task)
+            setNotification(task: task)
 
-        super.viewWillDisappear(animated)
+            super.viewWillDisappear(animated)
+        }
     }
     
     // タスクのローカル通知を登録する
